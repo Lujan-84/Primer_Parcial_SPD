@@ -7,19 +7,19 @@
 ##### + Luján Miguel
 ##### + Martin Minuto
   
-____
+***
 ### <span style="color:white">[Proyecto: Contador de 0 a 99]()</span> 
 ![Imagen Proyecto](img/ContadorDe0a99.png)
 
----
+***
 
 ### <span style="color:white">[Descripción]()</span> 
 ##### Contador de 0 a 99 dígitos utilizando la multiplexación en una placa Arduino Uno y dos displays de 7 segmentos. Contiene 3 pulsadores, para aumentar, disminuir y reiniciar la cuenta. 
 
-----
+***
 ### <span style="color:white">[Función principal]()</span>
 ##### Esta función se encarga de controlar la multiplexación.
-##### Recibe el parámetro contador y apaga ambos displays,determina cuál es el dígito a encender  en las decenas y lo muestra; vuelve a apagar ambos displays y luego determina cuál es el dígito a encender en las unidades y los muestra.
+##### Recibe el parámetro contador y apaga ambos displays,determina cuál es el dígito a encender  en las decenas y lo muestra; vuelve a apagar ambos displays y luego determina cuál es el dígito a encender en las unidades y lo muestra. Este proceso es realizado a gran velocidad, de manera tal que se hace indetectable para el ojo humano.
 
 
 ```C++
