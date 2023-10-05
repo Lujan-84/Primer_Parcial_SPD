@@ -30,7 +30,7 @@ void imprimirCuenta(int contador)
 ```
 ### [Diagrama]()
 
-![Diagrama proyecto](img\Diagrama.png)
+![Diagrama proyecto](img/Diagrama.png)
 
 
 ### :eyes: [Link al proyecto]()
