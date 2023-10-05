@@ -7,7 +7,7 @@
 ##### + Martin Minuto
   
 ### [Proyecto: Contador de 0 a 99]()
-![Imagen Proyecto](img\ContadorDe0a99.png)
+![Imagen Proyecto](img/ContadorDe0a99.png)
 
 ### [Descripción]()
 ##### Contador de 0 a 99 dígitos utilizando la multiplexación en una placa Arduino Uno y dos displays de 7 segmentos. Contiene 3 pulsadores, para aumentar, disminuir y reiniciar la cuenta. 
