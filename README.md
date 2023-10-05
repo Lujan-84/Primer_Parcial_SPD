@@ -1,5 +1,7 @@
 #[Primer Parcial]()
+
 ![Imagen portada](img\Arduino.png)
+
 ###[Integrantes]()
 #####+ Luján Miguel
 #####+ Martin Minuto
