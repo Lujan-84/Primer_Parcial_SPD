@@ -19,7 +19,7 @@
 ***
 ### <span style="color:white">[Función principal]()</span>
 ##### Esta función se encarga de controlar la multiplexación.
-##### Recibe el parámetro contador y apaga ambos displays,determina cuál es el dígito a encender  en las decenas y lo muestra; vuelve a apagar ambos displays y luego determina cuál es el dígito a encender en las unidades y los muestra.
+##### Recibe el parámetro contador y apaga ambos displays,determina cuál es el dígito a encender  en las decenas y lo muestra; vuelve a apagar ambos displays y luego determina cuál es el dígito a encender en las unidades y lo muestra. Este proceso es realizado a gran velocidad, de manera tal que se hace indetectable para el ojo humano.
 
 
 ```C++
