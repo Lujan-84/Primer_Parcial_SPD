@@ -38,6 +38,9 @@ void imprimirCuenta(int contador)
 ### <span style="color:white">[Diagrama]()</span>
 
 ![Diagrama proyecto](img/Diagrama.png)
+###### Utiliza los pines 7,8,9,10,11,12 y 13 como Outputs y están asociados a los leds de los dos displays. Si hubiese que utilizar un pin por cada led, no dispondríamos de pines para conectar los pulsadores. 
+###### Los pines 4,5 y 6 son utilizados como Inputs para poder detectar cuándo es presionado alguno de los pulsadores y de ese modo controlar la cuenta. 
+###### Por último, los pines A4 y A5 son utilizados como Outputs para controlar la multiplexación, encendiendo y apagando de manera coordinada ambos displays.
 
 ---
 
