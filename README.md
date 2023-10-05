@@ -1,4 +1,4 @@
-#<span style="color:white">[Primer Parcial]()</span> 
+# <span style="color:white">[Primer Parcial]()</span> 
 
 ![Imagen portada](img/Arduino.png)
 
