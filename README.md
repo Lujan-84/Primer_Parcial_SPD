@@ -1,6 +1,6 @@
 # [Primer Parcial]()
 
-![Imagen portada](img\Arduino.png)
+![Imagen portada](img/Arduino.png)
 
 ### [Integrantes]()
 ##### + Luján Miguel
