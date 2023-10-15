@@ -8,8 +8,13 @@
 + Luján Miguel
 + Martin Minuto
   
+
 ***
 ### <span style="color:white">[Proyecto: Contador de 0 a 99]()</span> 
+
+<p align="center">
+<img src = img\Tercera_Parte_Contador_0_a_99_automatico.png>
+</p>
 
 ***
 
@@ -18,6 +23,7 @@
 <p align="center">
 <img src = img/ContadorDe0a99.png>
 </p>
+
 
 Contador de 0 a 99 dígitos utilizando la multiplexación en una placa Arduino Uno y dos displays de 7 segmentos. Contiene 3 pulsadores, para aumentar, disminuir y reiniciar la cuenta. 
 
@@ -29,16 +35,20 @@ Contador de 0 a 99 dígitos utilizando la multiplexación en una placa Arduino U
 </p>
 
  Contador automático de 0 a 99. Utiliza un sensor de temperatura TMP36 para determinar el sentido de la cuenta; si la temperatura es menor a 20 °C la cuenta es regresiva; si la temperatura es mayor o igual a 20 °C, la cuenta irá en aumento a la vez que se encederá el motor de aficionado conectado a nuestro dispositivo.
- Además utiliza un interruptor deslizante, el cuál determinará si la cuenta muestra los números uno a uno, o solamente los números que sean primos. 
-
-
-
-
+ A su vez utiliza un interruptor deslizante, el cuál determinará si la cuenta muestra los números uno a uno, o solamente los números que sean primos. 
 
 ***
+### [Descripción proyecto final]()
+Para finalizar el proyecto incluí una fotoresistencia y tres luces leds. Las mismas dependerán de la medición de luz recibida por la fotoresistencia para su encendido u apagado. A medida que la medición de luz sea mayor las luces leds se irán apagando.
+
+***
+
 ### [Funciones principales]()
 Esta función se encarga de controlar la multiplexación.
 Recibe el parámetro contador y apaga ambos displays,determina cuál es el dígito a encender  en las decenas y lo muestra; vuelve a apagar ambos displays y luego determina cuál es el dígito a encender en las unidades y lo muestra. Este proceso es realizado a gran velocidad, de manera tal que se hace indetectable para el ojo humano.
+
+***
+
 
 
 ```C++
@@ -83,7 +93,30 @@ int interruptor_on(int contador, int temperatura)
   return contador;
 }
 ```
-
+***
+Esta función recibe como parámetro la lectura del fotoresistor y dependiendo de la misma enciende o apaga las luces led, llamando a la función encender_luces().
+A medida que la lectura recibida es mayor, las luces se van apagando.
+```C++
+void luces_led(int lectura_foto)
+{
+ 	if(lectura_foto < 300)
+    { 
+      encender_luces(HIGH,HIGH,HIGH);  
+    }
+    else if(lectura_foto >= 300 && lectura_foto < 500)
+    {
+      encender_luces(LOW,HIGH,HIGH);
+    }
+    else if(lectura_foto >= 500 && lectura_foto < 700)
+    {
+      encender_luces(LOW,LOW,HIGH);
+    }
+    else if(lectura_foto >= 700)
+    {
+      encender_luces(LOW,LOW,LOW);
+    }
+}
+```
 ---
 ### [Diagrama primera parte]()
 
@@ -115,10 +148,17 @@ Los motores de aficionados son frecuentes para accionar ruedas de robots y vehí
   
 Es un dispositivo mecánico desplazable para aplicaciones de ON y OFF ya que puede abrir o cerrar el paso de corriente de un circuito. El interruptor deslizable tiene 3 pines, se puede implementarl para desviar o interrumpir el curso de una corriente eléctrica de algunas placas o módulos de electrónica. En nuestro proyecto lo incorporamos para cumplir con un control lógico, para habilitar un funcionamiento en específico.
 
++ Fotoresistencia (LDR):
+  
+Una fotoresistencia es un componente electrónico cuya resistencia varía en función de la luz recibida.
+Se trata de un sensor que actúa como una resistencia variable en función de la luz que capta.
+A mayor intensidad de luz, menor resistencia: el sensor ofrece una resistencia de 1 M ohm en la oscuridad, alrededor de 10 k ohm en exposición de luz ambiente, hasta menos de 1 k ohm expuesto a la luz del sol. 
+El valor de resistencia eléctrica de un LDR es bajo cuando hay luz incidiendo en él (puede descender hasta 50 ohms) y muy alto cuando está a oscuras (varios megaohmios).
+
 ***
 
 ### :eyes: [Link al proyecto]()
-+ [Proyecto](https://www.tinkercad.com/things/3eCkR0PgxvF)
++ [Proyecto](https://www.tinkercad.com/things/lzuGbIrmN38-tercerapartecontador0a99automatico/editel?sharecode=eGGKVQ53IUi6j5y63HcQhGlASj6e2SnqX5ELPM93agE)
   
 ### :book: [Fuentes]()
 + [Videos clase](https://www.youtube.com/playlist?list=PL7LaR6_A2-E11BQXtypHMgWrSR-XOCeyD)

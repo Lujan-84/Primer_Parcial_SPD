@@ -1,10 +1,28 @@
 /* 
--------------------------CONSIGNA PRIMER PARCIAL -------------------------------------------
+-----------------------CONSIGNA PRIMER PARCIAL----------- --------------------Parte Uno  ----------------------------
 	Diseñar un contador de 0 a 99 utilizando dos displays de 7 segmentos y tres botones para
 controlar la cuenta. Debes implementar la técnica de multiplexación para mostrar los dígitos
 en los displays. El contador debe comenzar en 0 y debe ser capaz de aumentar o disminuir
 su valor en una unidad con los botones.
---------------------------------------------------------------------------------------------
+--------------------Parte Dos ------------------------------
+Modifica el proyecto de la Parte 1 de la siguiente manera:
+
+1. Sustituye uno de los botones por un interruptor deslizante (switch) de dos posiciones.
+Dependiendo de la posición del interruptor, el display debe mostrar o bien el contador (como
+en la Parte 1) o los números primos en el rango de 0 a 99.
+2. Investiga un componente electrónico adicional que podría mejorar este proyecto.
+Proporciona una descripción detallada del componente, su función y cómo se podría
+integrar en el proyecto.
+-Motor de cc
+-Motor de aficionado
+3. Investigar en la semana y agregar uno de los siguientes componentes
+-Sensor de flexión
+-Sensor de fuerza
+-Sensor de temperatura
+---------------------Parte Tres ------------------------------
+-Si tu número de documento termina en (0-3) deberás implementar a tu proyecto la
+fotoresistencia
+--------------------------------------------------------------
 */
 
 #define B 13
@@ -16,6 +34,11 @@ su valor en una unidad con los botones.
 #define C 7
 #define MOTOR 6
 #define INTERRUPTOR 2
+#define GREEN 5
+#define YELLOW 4
+#define RED 3
+#define TEMPERATURA A0
+#define FOTORESISTENCIA A1
 #define UNIDAD A4
 #define DECENAS A5
 
@@ -31,6 +54,9 @@ void setup()
   pinMode(E, OUTPUT);
   pinMode(F, OUTPUT);
   pinMode(G, OUTPUT);
+  pinMode(GREEN, OUTPUT);
+  pinMode(YELLOW, OUTPUT);
+  pinMode(RED, OUTPUT);
   pinMode(MOTOR, OUTPUT);
   pinMode(INTERRUPTOR, INPUT_PULLUP);
   pinMode(UNIDAD, OUTPUT);
@@ -44,17 +70,20 @@ void setup()
 int interruptor = 0;
 int segundos_ahora = 0;
 int segundos_anterior = -1;
-int contador = 0;
+int contador = -1;
 int temperaturaRead = 0;
 int temperatura = 0;
 
 void loop()
 {
-   temperaturaRead = analogRead(A0);
+   temperaturaRead = analogRead(TEMPERATURA);
    temperatura = map(temperaturaRead,20,358,-40,125);
+   Serial.print("temperatura");
+   Serial.println(temperatura);
    int interruptor = digitalRead(INTERRUPTOR);
+   int lectura_foto = analogRead(FOTORESISTENCIA);
 
-   // Aumento o disminuyo el contador cada vez que pasa un segundo, en caso de mostrar números primos llama a la funcion interruptor_on
+   // Aumento o disminuyo el contador cada vez que pasa un segundo, en caso de mostrar números primos llama a la funcion interruptor_on()
    if (segundos_ahora != segundos_anterior)
    { 
       if (temperatura >= 20)    // Si la temperatura es mayor o igual a 20° C la cuenta aumenta y se enciende el motor
@@ -69,9 +98,9 @@ void loop()
       else			// Si la temperatura es menor a 20° C la cuenta disminuye y se apaga el motor
       { 
          if (contador  == 0)
-   	 {
+   	     {
       	    contador = 100;
-   	 }
+   	     }
          contador--;
          digitalWrite(MOTOR,LOW);
       }
@@ -84,6 +113,7 @@ void loop()
    imprimirCuenta(contador);
    segundos_ahora = millis()/1000;
    delay(TIEMPO_DISPLAY_ON);  
+   luces_led(lectura_foto);
 }
 
 // Define los estados de los leds del display dependiendo del dígito que queramos mostrar
@@ -148,7 +178,7 @@ void encenderLeds(int estado_A,int estado_B,int estado_C,int estado_D,int estado
     digitalWrite(G, estado_G);
 }
 
-//Apaga y encendie los displays según se deba mostrar Unidades o Decenas
+//Apaga y enciende los displays según se deba mostrar Unidades o Decenas
 void encenderDigito(int digito)
 {
 	if (digito == UNIDAD)
@@ -181,13 +211,12 @@ void imprimirCuenta(int contador)
     encenderDigito(UNIDAD);
 }
 
-//Si el interruptor está encendido modifica el contador para sólo mostrar números primos, recibe por parámetro la temperatura
-  para determinar si la cuenta es en aumento o regresiva.
+//Si el interruptor está encendido modifica el contador para sólo mostrar números primos, recibe por parámetro la temperatura para determinar si la cuenta es en aumento o regresiva.
 int interruptor_on(int contador, int temperatura)
 {  
   while (true)
   {
-     if (Primo(contador))
+     if (primo(contador))
      {
         return contador;
         break;   
@@ -209,7 +238,7 @@ int interruptor_on(int contador, int temperatura)
 }
 
 // Recibe por párametro el número a mostrar y determina si es primo o no, devolviendo true en caso de ser primo
-bool Primo(int n)
+bool primo(int n)
 {
   for(int i =2; i <n; i++)
   {
@@ -219,4 +248,34 @@ bool Primo(int n)
     }
   }
   return true;
+}
+
+// A medida que aumenta la luz recibida por la fotoresistencia se apagan las luces leds.   
+void luces_led(int lectura_foto)
+{
+ 	  if(lectura_foto < 300)
+    { 
+      digitalWrite(GREEN, HIGH);
+      digitalWrite(YELLOW, HIGH);
+      digitalWrite(RED, HIGH);  
+    }
+    else if(lectura_foto >= 300 && lectura_foto < 500)
+    {
+      digitalWrite(GREEN, LOW);
+      digitalWrite(YELLOW, HIGH);
+      digitalWrite(RED, HIGH);
+      
+    }
+    else if(lectura_foto >= 500 && lectura_foto < 700)
+    {
+      digitalWrite(GREEN, LOW);
+      digitalWrite(YELLOW, LOW);
+      digitalWrite(RED, HIGH);
+    }
+    else if(lectura_foto >= 700)
+    {
+      digitalWrite(GREEN, LOW);
+      digitalWrite(YELLOW, LOW);
+      digitalWrite(RED, LOW);
+    }
 }
