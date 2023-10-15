@@ -16,7 +16,7 @@ su valor en una unidad con los botones.
 #define C 7
 #define BOTON_SUBE 6
 #define BOTON_BAJA 5
-#define BOTON_RESET 4
+#define INTERRUPTOR 2
 #define UNIDAD A4
 #define DECENAS A5
 
@@ -36,12 +36,13 @@ void setup()
   pinMode(G, OUTPUT);
   pinMode(BOTON_SUBE,INPUT_PULLUP);
   pinMode(BOTON_BAJA, INPUT_PULLUP);
-  pinMode(BOTON_RESET, INPUT_PULLUP);
+  pinMode(INTERRUPTOR, INPUT_PULLUP);
   pinMode(UNIDAD, OUTPUT);
   pinMode(DECENAS, OUTPUT);
   digitalWrite(UNIDAD, 0);
   digitalWrite(DECENAS, 0);
-  encenderDigito(0);  
+  encenderDigito(0);
+  Serial.begin(9600);  
    
 }
 
@@ -50,8 +51,7 @@ int sube_ahora = 1;
 int sube_anterior = 1;
 int baja_ahora = 1;
 int baja_anterior = 1;
-int reset_ahora = 1;
-int reset_anterior = 1;
+int interruptor = 0;
 
 void loop()
 {
@@ -72,12 +72,9 @@ void loop()
         contador = 99;
       }
     }
-  	else if (presionado == BOTON_RESET)
-    {
-      contador = 0;
-    }
-  
-  imprimirCuenta(contador);
+  	
+   contador = interruptor_on(contador,presionado);
+   imprimirCuenta(contador);
 }
 
 // Define los estados de los leds del display
@@ -180,8 +177,7 @@ int keypresionada(void)
 {
     sube_ahora = digitalRead(BOTON_SUBE);
     baja_ahora = digitalRead(BOTON_BAJA);
-    reset_ahora = digitalRead(BOTON_RESET);
-
+    
     if (sube_ahora)
     {
         sube_anterior = 1;
@@ -189,10 +185,6 @@ int keypresionada(void)
     if (baja_ahora)
     {
         baja_anterior = 1;
-    }
-    if (reset_ahora)
-    {
-        reset_anterior = 1;
     }
 
     if (sube_ahora == 0 && sube_ahora != sube_anterior)
@@ -205,11 +197,36 @@ int keypresionada(void)
         baja_anterior = baja_ahora;
         return BOTON_BAJA;
     }
-    if (reset_ahora == 0 && reset_ahora != reset_anterior)
-    {
-        reset_anterior = reset_ahora;
-        return BOTON_RESET;
-    }
+   
   return 0;
-}                  
+}   
+
+//Si el interruptor está encendido modifica el contador para sólo mostrar números primos 
+int interruptor_on(int contador,int presionado)
+{  
+  interruptor = digitalRead(INTERRUPTOR);
+  if (interruptor)
+  {
+    if (contador % 2 == 0)
+    {
+      if (presionado == BOTON_SUBE) // Utiliza el parametro presionado para determinar incremento o disminución
+      {
+      	contador ++;
+      }
+      else if (presionado == BOTON_BAJA)
+      {
+        if (contador != 0)
+        {
+        	contador --;
+        }
+        else
+        {
+          contador = 99; 
+        }
+      }
+    }
+  }
+  
+  return contador;
+}
 
