@@ -78,9 +78,7 @@ void loop()
       if (interruptor)
       {  
           contador = interruptor_on(contador,temperatura);
-          segundos_anterior = segundos_ahora; 
       }
-      segundos_ahora = millis()/1000; 
       segundos_anterior = segundos_ahora; 
    }
    imprimirCuenta(contador);
@@ -206,8 +204,7 @@ int interruptor_on(int contador, int temperatura)
      {
        contador--;
      }
-  }
-     	
+  }   	
   return contador;
 }
 
