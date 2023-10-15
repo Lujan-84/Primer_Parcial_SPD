@@ -14,14 +14,14 @@ su valor en una unidad con los botones.
 #define E 9
 #define D 8
 #define C 7
-#define BOTON_SUBE 6
-#define BOTON_BAJA 5
+#define MOTOR 6
 #define INTERRUPTOR 2
 #define UNIDAD A4
 #define DECENAS A5
 
 #define APAGADOS 0
-#define TIEMPO_DISPLAY_ON 10
+#define TIEMPO_DISPLAY_ON 15
+
 
 
 void setup()
@@ -34,47 +34,60 @@ void setup()
   pinMode(E, OUTPUT);
   pinMode(F, OUTPUT);
   pinMode(G, OUTPUT);
-  pinMode(BOTON_SUBE,INPUT_PULLUP);
-  pinMode(BOTON_BAJA, INPUT_PULLUP);
+  pinMode(MOTOR, OUTPUT);
   pinMode(INTERRUPTOR, INPUT_PULLUP);
   pinMode(UNIDAD, OUTPUT);
   pinMode(DECENAS, OUTPUT);
   digitalWrite(UNIDAD, 0);
   digitalWrite(DECENAS, 0);
-  encenderDigito(0);
+  encenderDigito(0);  
   Serial.begin(9600);  
-   
 }
 
-int contador = 0;
-int sube_ahora = 1;
-int sube_anterior = 1;
-int baja_ahora = 1;
-int baja_anterior = 1;
+
 int interruptor = 0;
+int segundos_ahora = 0;
+int segundos_anterior = -1;
+int contador = 0;
+int temperaturaRead = 0;
+int temperatura = 0;
 
 void loop()
 {
-    int presionado = keypresionada();
-    if (presionado == BOTON_SUBE)
-    {
-      contador ++;
-      if (contador > 99)
+   temperaturaRead = analogRead(A0);
+   temperatura = map(temperaturaRead,20,358,-40,125);
+   int interruptor = digitalRead(INTERRUPTOR);
+   if (segundos_ahora != segundos_anterior)
+   { 
+      if (temperatura >= 20)
       {
-        contador = 0;
+         contador++;
+         digitalWrite(MOTOR,HIGH);
+         if (contador > 99)
+         {
+            contador = 0;
+         }
       }
-    }
-  	else if (presionado == BOTON_BAJA)
-    {
-      contador --;
-      if (contador < 0)
-      {
-        contador = 99;
+      else
+      { 
+         if (contador  == 0)
+   	 {
+      	    contador = 100;
+   	 }
+         contador--;
+         digitalWrite(MOTOR,LOW);
       }
-    }
-  	
-   contador = interruptor_on(contador,presionado);
+      if (interruptor)
+      {  
+          contador = interruptor_on(contador,temperatura);
+          segundos_anterior = segundos_ahora; 
+      }
+      segundos_ahora = millis()/1000; 
+      segundos_anterior = segundos_ahora; 
+   }
    imprimirCuenta(contador);
+   segundos_ahora = millis()/1000;
+   delay(TIEMPO_DISPLAY_ON);  
 }
 
 // Define los estados de los leds del display
@@ -118,7 +131,7 @@ void imprimirDigito(int n)
 // Apaga todos los leds del display
 void apagarLeds()
 {
-  	digitalWrite(A, LOW);
+    digitalWrite(A, LOW);
     digitalWrite(B, LOW);
     digitalWrite(C, LOW);
     digitalWrite(D, LOW);
@@ -172,61 +185,43 @@ void imprimirCuenta(int contador)
     encenderDigito(UNIDAD);
 }
 
-//Determina cuándo se presiona un pulsador y cuándo es soltado
-int keypresionada(void)
-{
-    sube_ahora = digitalRead(BOTON_SUBE);
-    baja_ahora = digitalRead(BOTON_BAJA);
-    
-    if (sube_ahora)
-    {
-        sube_anterior = 1;
-    }
-    if (baja_ahora)
-    {
-        baja_anterior = 1;
-    }
-
-    if (sube_ahora == 0 && sube_ahora != sube_anterior)
-    {
-        sube_anterior = sube_ahora;
-        return BOTON_SUBE;
-    }
-    if (baja_ahora == 0 && baja_ahora != baja_anterior)
-    {
-        baja_anterior = baja_ahora;
-        return BOTON_BAJA;
-    }
-   
-  return 0;
-}   
-
-//Si el interruptor está encendido modifica el contador para sólo mostrar números primos 
-int interruptor_on(int contador,int presionado)
+//Si el interruptor está encendido modifica el contador para sólo mostrar números primos, recibe por parámetro la temperatura
+  para determinar si la cuenta es en aumento o regresiva.
+int interruptor_on(int contador, int temperatura)
 {  
-  interruptor = digitalRead(INTERRUPTOR);
-  if (interruptor)
+  while (true)
   {
-    if (contador % 2 == 0)
-    {
-      if (presionado == BOTON_SUBE) // Utiliza el parametro presionado para determinar incremento o disminución
-      {
-      	contador ++;
-      }
-      else if (presionado == BOTON_BAJA)
-      {
-        if (contador != 0)
+     if (Primo(contador))
+     {
+        return contador;
+        break;   
+     }
+     else if (temperatura >= 20)
+     {
+        contador++;
+        if (contador == 99)
         {
-        	contador --;
+          contador = 1;
         }
-        else
-        {
-          contador = 99; 
-        }
-      }
-    }
+     }
+     else
+     {
+       contador--;
+     }
   }
-  
+     	
   return contador;
 }
 
+// Recibe por párametro el número a mostrar y determina si es primo o no, devolviendo true en caso de ser primo
+bool Primo(int n)
+{
+  for(int i =2; i <n; i++)
+  {
+    if (n % i == 0)
+    {
+      return false;
+    }
+  }
+  return true;
+}
