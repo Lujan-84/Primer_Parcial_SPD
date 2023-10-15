@@ -22,11 +22,8 @@ su valor en una unidad con los botones.
 #define APAGADOS 0
 #define TIEMPO_DISPLAY_ON 15
 
-
-
 void setup()
 {
-  
   pinMode(A, OUTPUT);
   pinMode(B, OUTPUT);
   pinMode(C, OUTPUT);
@@ -44,7 +41,6 @@ void setup()
   Serial.begin(9600);  
 }
 
-
 int interruptor = 0;
 int segundos_ahora = 0;
 int segundos_anterior = -1;
@@ -57,9 +53,11 @@ void loop()
    temperaturaRead = analogRead(A0);
    temperatura = map(temperaturaRead,20,358,-40,125);
    int interruptor = digitalRead(INTERRUPTOR);
+
+   // Aumento o disminuyo el contador cada vez que pasa un segundo, en caso de mostrar números primos llama a la funcion interruptor_on
    if (segundos_ahora != segundos_anterior)
    { 
-      if (temperatura >= 20)
+      if (temperatura >= 20)    // Si la temperatura es mayor o igual a 20° C la cuenta aumenta y se enciende el motor
       {
          contador++;
          digitalWrite(MOTOR,HIGH);
@@ -68,7 +66,7 @@ void loop()
             contador = 0;
          }
       }
-      else
+      else			// Si la temperatura es menor a 20° C la cuenta disminuye y se apaga el motor
       { 
          if (contador  == 0)
    	 {
@@ -90,7 +88,7 @@ void loop()
    delay(TIEMPO_DISPLAY_ON);  
 }
 
-// Define los estados de los leds del display
+// Define los estados de los leds del display dependiendo del dígito que queramos mostrar
 void imprimirDigito(int n)
 {
   apagarLeds();
@@ -152,7 +150,7 @@ void encenderLeds(int estado_A,int estado_B,int estado_C,int estado_D,int estado
     digitalWrite(G, estado_G);
 }
 
-//Ejecuta la multiplexación apagando un display y encendiendo el otro según deba mostrar Unidades o Decenas
+//Apaga y encendie los displays según se deba mostrar Unidades o Decenas
 void encenderDigito(int digito)
 {
 	if (digito == UNIDAD)
@@ -174,7 +172,7 @@ void encenderDigito(int digito)
     }
 }
 
-//Controla la multiplexación, a partir del contador recibido determina la decena y la unidad a mostrar                  
+//Ejecuta la multiplexación, a partir del contador recibido determina la decena y la unidad a mostrar. Llama a las funciones para primero apagar los display, luego enviar las señales digitales para enceder el dígito deseado y por último encender el display en el que queremos mostrar dicho dígito. Luego repite el proceso con el siguiente display y el dígito a ser mostrado.                 
 void imprimirCuenta(int contador)
 {
     encenderDigito(APAGADOS);
