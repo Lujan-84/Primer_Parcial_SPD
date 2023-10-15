@@ -17,39 +17,36 @@
 </p>
 
 ***
+### [Descripción proyecto final]()
+Contador automático de 0 a 99 utilizando la multiplexación en una placa Arduino Uno y dos displays de 7 segmentos. 
+Utiliza un sensor de temperatura TMP36 para determinar el sentido de la cuenta; si la temperatura es menor a 20 °C la cuenta es regresiva; si la temperatura es mayor o igual a 20 °C, la cuenta irá en aumento a la vez que se encederá el motor de aficionado conectado a nuestro dispositivo.
+ A su vez utiliza un interruptor deslizante, el cuál determinará si la cuenta muestra los números uno a uno, o solamente los números que sean primos. 
+Para finalizar el proyecto incluí una fotoresistencia y tres luces leds. Las mismas dependerán de la medición de luz recibida por la fotoresistencia para su encendido u apagado. A medida que la medición de luz sea mayor las luces leds se irán apagando.
 
-### [Descripción primera parte]() 
+***
+
+### [Imagen primera parte]() 
 
 <p align="center">
 <img src = img/ContadorDe0a99.png>
 </p>
 
 
-Contador de 0 a 99 dígitos utilizando la multiplexación en una placa Arduino Uno y dos displays de 7 segmentos. Contiene 3 pulsadores, para aumentar, disminuir y reiniciar la cuenta. 
+Contador de 0 a 99 dígitos . Contiene 3 pulsadores, para aumentar, disminuir y reiniciar la cuenta. 
 
 ***
 
-### [Descripción segunda parte]() 
+### [Imagen segunda parte]() 
 <p align="center">
 <img src = img\Segunda_Parte_Contador_0_a_99_automatico.png>
 </p>
 
- Contador automático de 0 a 99. Utiliza un sensor de temperatura TMP36 para determinar el sentido de la cuenta; si la temperatura es menor a 20 °C la cuenta es regresiva; si la temperatura es mayor o igual a 20 °C, la cuenta irá en aumento a la vez que se encederá el motor de aficionado conectado a nuestro dispositivo.
- A su vez utiliza un interruptor deslizante, el cuál determinará si la cuenta muestra los números uno a uno, o solamente los números que sean primos. 
-
 ***
-### [Descripción proyecto final]()
-Para finalizar el proyecto incluí una fotoresistencia y tres luces leds. Las mismas dependerán de la medición de luz recibida por la fotoresistencia para su encendido u apagado. A medida que la medición de luz sea mayor las luces leds se irán apagando.
-
-***
-
 ### [Funciones principales]()
 Esta función se encarga de controlar la multiplexación.
 Recibe el parámetro contador y apaga ambos displays,determina cuál es el dígito a encender  en las decenas y lo muestra; vuelve a apagar ambos displays y luego determina cuál es el dígito a encender en las unidades y lo muestra. Este proceso es realizado a gran velocidad, de manera tal que se hace indetectable para el ojo humano.
 
 ***
-
-
 
 ```C++
 void imprimirCuenta(int contador)
