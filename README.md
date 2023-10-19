@@ -17,6 +17,9 @@
 </p>
 
 ***
+### [Descripción proyecto examen]()
+Se modificó el proyecto, utilizando el interruptor deslizante para iniciar o apagar el sistema en su totalidad.
+
 ### [Descripción proyecto final]()
 Contador automático de 0 a 99 utilizando la multiplexación en una placa Arduino Uno y dos displays de 7 segmentos. 
 Utiliza un sensor de temperatura TMP36 para determinar el sentido de la cuenta; si la temperatura es menor a 20 °C la cuenta es regresiva; si la temperatura es mayor o igual a 20 °C, la cuenta irá en aumento a la vez que se encederá el motor de aficionado conectado a nuestro dispositivo.

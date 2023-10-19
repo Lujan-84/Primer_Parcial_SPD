@@ -22,7 +22,10 @@ integrar en el proyecto.
 ---------------------Parte Tres ------------------------------
 -Si tu número de documento termina en (0-3) deberás implementar a tu proyecto la
 fotoresistencia
---------------------------------------------------------------
+---------------------Parte Cuatro---------------------------------------
+-Si tu número de documento termina en (0-3) deberás implementar a tu proyecto que el interruptor deslizante de la parte dos tenga la función de encender y apagar el sistema, solo mostrando el contador.
+---------------------------------------------------------------------------------
+
 */
 
 #define B 13
@@ -78,40 +81,60 @@ void loop()
 {
    temperaturaRead = analogRead(TEMPERATURA);
    temperatura = map(temperaturaRead,20,358,-40,125);
+   Serial.print("temperatura");
+   Serial.println(temperatura);
    int interruptor = digitalRead(INTERRUPTOR);
    int lectura_foto = analogRead(FOTORESISTENCIA);
 
    // Aumento o disminuyo el contador cada vez que pasa un segundo, en caso de mostrar números primos llama a la funcion interruptor_on()
    if (segundos_ahora != segundos_anterior)
    { 
-      if (temperatura >= 20)    // Si la temperatura es mayor o igual a 20° C la cuenta aumenta y se enciende el motor
-      {
-         contador++;
-         digitalWrite(MOTOR,HIGH);
-         if (contador > 99)
-         {
-            contador = 0;
-         }
-      }
-      else			// Si la temperatura es menor a 20° C la cuenta disminuye y se apaga el motor
-      { 
-         if (contador  == 0)
-   	     {
-      	    contador = 100;
-   	     }
-         contador--;
-         digitalWrite(MOTOR,LOW);
-      }
       if (interruptor)
-      {  
-          contador = interruptor_on(contador,temperatura);
+      {
+        encenderDigito(APAGADOS);
+        digitalWrite(MOTOR,LOW);
+        encender_luces(LOW,LOW,LOW);
+        
       }
-      segundos_anterior = segundos_ahora; 
+      else
+      {
+         if (temperatura >= 20)    // Si la temperatura es mayor o igual a 20° C la cuenta aumenta y se enciende el motor
+         {
+             contador++;
+             digitalWrite(MOTOR,HIGH);
+             if (contador > 99)
+             {
+                contador = 0;
+             }
+          }
+          else			//Si la temperatura es menor a 20° C la cuenta disminuye y se apaga el motor
+          { 
+             if (contador  < 0)
+            {
+              contador = 99;
+            }
+            contador--;
+            digitalWrite(MOTOR,LOW);
+        }
+        //if (interruptor)
+        //{  
+           //contador = interruptor_on(contador,temperatura);
+        //}
+        
+        luces_led(lectura_foto);
+        
+      }
+      segundos_anterior = segundos_ahora;
+      
+   } 
+   if (not interruptor)
+   {
+     imprimirCuenta(contador);
+      
    }
-   imprimirCuenta(contador);
    segundos_ahora = millis()/1000;
    delay(TIEMPO_DISPLAY_ON);  
-   luces_led(lectura_foto);
+   
 }
 
 // Define los estados de los leds del display dependiendo del dígito que queramos mostrar
