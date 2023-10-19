@@ -78,8 +78,6 @@ void loop()
 {
    temperaturaRead = analogRead(TEMPERATURA);
    temperatura = map(temperaturaRead,20,358,-40,125);
-   Serial.print("temperatura");
-   Serial.println(temperatura);
    int interruptor = digitalRead(INTERRUPTOR);
    int lectura_foto = analogRead(FOTORESISTENCIA);
 
