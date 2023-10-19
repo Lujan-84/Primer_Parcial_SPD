@@ -158,7 +158,7 @@ El valor de resistencia eléctrica de un LDR es bajo cuando hay luz incidiendo e
 ***
 
 ### :eyes: [Link al proyecto]()
-+ [Proyecto]((https://www.tinkercad.com/things/6mNOTCIvZeZ))
++ [Proyecto](https://www.tinkercad.com/things/6mNOTCIvZeZ)
   
 ### :book: [Fuentes]()
 + [Videos clase](https://www.youtube.com/playlist?list=PL7LaR6_A2-E11BQXtypHMgWrSR-XOCeyD)
